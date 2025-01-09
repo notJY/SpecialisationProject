@@ -51,9 +51,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "EquipWeapon",
+                    "name": "ToggleInventory",
                     "type": "Button",
-                    "id": "980b6aa0-268a-4e83-afd5-77f3ed7f2b8a",
+                    "id": "14e463a3-c745-45ba-860c-5690d3d188a2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill1",
+                    "type": "Button",
+                    "id": "8eacfd38-76a6-4381-80ea-688852bca219",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill2",
+                    "type": "Button",
+                    "id": "8e36e8a1-e96e-4897-a8e3-113e510a6646",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -119,7 +137,7 @@
                 {
                     "name": "",
                     "id": "b883b9cf-99a9-4226-b588-488eabb8ef86",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -140,12 +158,34 @@
                 },
                 {
                     "name": "",
-                    "id": "4a5cc82e-47e8-426b-8e62-0b4d4f7947fd",
-                    "path": "<Keyboard>/f",
+                    "id": "1fa2c9bb-e781-4f85-8350-6b99b2e56900",
+                    "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "EquipWeapon",
+                    "action": "ToggleInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3db6bff9-cdb3-43bd-b36f-ae6654b89ca0",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aeb104df-7ce7-491d-947a-70c559a3dd40",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

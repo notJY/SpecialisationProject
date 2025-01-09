@@ -1006,7 +1006,6 @@ GameObject:
   - component: {fileID: 8179241690848264628}
   - component: {fileID: 1608564340528685128}
   - component: {fileID: 2762703928768880861}
-  - component: {fileID: 1756294388572295641}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1077,7 +1076,9 @@ MonoBehaviour:
   runInput: {fileID: -3839321609708915974, guid: db041ef5447fc3f49a725e9dffa42862, type: 3}
   grapplingInput: {fileID: 6849911939603474162, guid: db041ef5447fc3f49a725e9dffa42862, type: 3}
   attackInput: {fileID: -3203150809768754043, guid: db041ef5447fc3f49a725e9dffa42862, type: 3}
-  equipWeaponInput: {fileID: -920041375011282496, guid: db041ef5447fc3f49a725e9dffa42862, type: 3}
+  inventoryInput: {fileID: -8857093738685243116, guid: db041ef5447fc3f49a725e9dffa42862, type: 3}
+  skill1Input: {fileID: 6999368662959336770, guid: db041ef5447fc3f49a725e9dffa42862, type: 3}
+  skill2Input: {fileID: -182113752871628535, guid: db041ef5447fc3f49a725e9dffa42862, type: 3}
 --- !u!114 &1721804946827339452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1090,14 +1091,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd10e4cd1d7b0454b8e70677de625dab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  jumpHeight: 8
+  playerStats: {fileID: 11400000, guid: 97f9b98a37fa3bc4799640a0c4a22889, type: 2}
   rb: {fileID: 5789225095936960779}
+  playerHeight: 4
+  animator: {fileID: 2008961277353530358}
   ignoredByRaycast:
     serializedVersion: 2
     m_Bits: 64
-  playerHeight: 4
-  animator: {fileID: 2008961277353530358}
 --- !u!95 &2008961277353530358
 Animator:
   serializedVersion: 5
@@ -1289,22 +1289,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
+  playerStats: {fileID: 11400000, guid: 97f9b98a37fa3bc4799640a0c4a22889, type: 2}
   animator: {fileID: 2008961277353530358}
   weaponPivot: {fileID: 3290983663446923293}
---- !u!114 &1756294388572295641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7313330089767252188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0dee0ddd2c65fd4ea3574a252cf2eb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currHealth: 100
+  animOverrides: {fileID: 22100000, guid: 70bf9f125eb894a4699e7412afcf6457, type: 2}
 --- !u!1 &7402194413323318335
 GameObject:
   m_ObjectHideFlags: 0

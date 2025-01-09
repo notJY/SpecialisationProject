@@ -7,7 +7,8 @@ public class PlayerInputMgr : MonoBehaviour
 {
     public static PlayerInputMgr instance = null;
     public InputActionAsset inputActions;
-    public InputActionReference moveInput, jumpInput, runInput, grapplingInput, attackInput, equipWeaponInput;
+    public InputActionReference moveInput, jumpInput, runInput, grapplingInput, attackInput, inventoryInput,
+                                skill1Input, skill2Input;
 
     void Awake()
     {   

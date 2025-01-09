@@ -8,10 +8,7 @@ using System;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed;
-    public float jumpHeight;
-    public float maxSpeed;
-
+    [SerializeField] private EntityStats playerStats;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float playerHeight;
     [SerializeField] private Animator animator;
@@ -31,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerInputMgr.instance.runInput.action.started += OnRun;
         PlayerInputMgr.instance.runInput.action.canceled += OnStopRun;
 
-        initSpeed = speed;
+        initSpeed = playerStats.speed;
     }
 
     private void OnDestroy()
@@ -66,17 +63,17 @@ public class PlayerMovement : MonoBehaviour
             //Dash
             if (runningTime < 0.3f)
             {
-                rb.AddForce(new Vector2(1, 0) * horizontalMove * speed/2, ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(1, 0) * horizontalMove * playerStats.speed /2, ForceMode2D.Impulse);
                 //Reset so player doesn't dash infinitely
                 runningTime = 1;
             }
             //Run
             else if (running)
             {
-                speed = initSpeed * 2;
+                playerStats.speed = initSpeed * 2;
             }
 
-            rb.AddForce(new Vector2(1, 0) * horizontalMove * speed, ForceMode2D.Force);
+            rb.AddForce(new Vector2(1, 0) * horizontalMove * playerStats.speed, ForceMode2D.Force);
         }
         //Stop player if no movement input
         else
@@ -85,24 +82,24 @@ public class PlayerMovement : MonoBehaviour
             
             if (!running)
             {
-                speed = initSpeed;
+                playerStats.speed = initSpeed;
             }
         }
 
         //Jump
         if (canJump)
         {
-            rb.AddForce(new Vector2(0, 1) * jumpHeight, ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(0, 1) * playerStats.jumpHeight, ForceMode2D.Impulse);
             canJump = false;
         }
         //Wall jump
         else if (canWallJump)
         {
-            rb.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x), 1) * jumpHeight, ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x), 1) * playerStats.jumpHeight, ForceMode2D.Impulse);
             canWallJump = false;
         }
 
-        rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, playerStats.maxSpeed);
     }
 
     private void LateUpdate()
