@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private EntityStats playerStats;
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Collider2D mainCol;
     [SerializeField] private float playerHeight;
     [SerializeField] private Animator animator;
     [SerializeField] private LayerMask ignoredByRaycast;
@@ -17,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private bool moving, canJump, running, canWallJump;
     private float initSpeed;
     private float runningTime = 1;
+    private List<ContactPoint2D> contactPoints = new List<ContactPoint2D>();
 
     private void Start()
     {
@@ -63,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
             //Dash
             if (runningTime < 0.3f)
             {
-                rb.AddForce(new Vector2(1, 0) * horizontalMove * playerStats.speed /2, ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(5, 0) * horizontalMove * playerStats.speed, ForceMode2D.Impulse);
                 //Reset so player doesn't dash infinitely
                 runningTime = 1;
             }
@@ -181,9 +183,22 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
-    public bool IsGrounded()
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        //Debug.DrawRay(transform.position, Vector2.down * (playerHeight / 2 + 0.1f), Color.red);
-        return Physics2D.Raycast(transform.position, Vector2.down, playerHeight/2 + 0.1f, ~ignoredByRaycast);
+        collision.GetContacts(contactPoints);
+    }
+
+    private bool IsGrounded()
+    {
+        foreach (ContactPoint2D contactPoint in contactPoints)
+        {
+            //Check if there's a contact point below the player
+            if (Mathf.Abs(contactPoint.point.y - mainCol.bounds.min.y) <= 0.1f)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

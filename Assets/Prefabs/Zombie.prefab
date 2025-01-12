@@ -1047,7 +1047,8 @@ MonoBehaviour:
   ignoredByRaycast:
     serializedVersion: 2
     m_Bits: 128
-  attackCollider: {fileID: 5635053253311264142}
+  mainCol: {fileID: 8696080119064177414}
+  attackCol: {fileID: 5635053253311264142}
 --- !u!1 &4120845776977314550
 GameObject:
   m_ObjectHideFlags: 0

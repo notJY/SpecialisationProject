@@ -18,7 +18,9 @@ public class Zombie : Dummy
     [SerializeField] private AIPath aiPath;
     [SerializeField] private Animator animator;
     [SerializeField] private LayerMask ignoredByRaycast;
-    [SerializeField] private Collider2D attackCollider;
+    [SerializeField] private Collider2D mainCol, attackCol;
+
+    private List<ContactPoint2D> contactPoints = new List<ContactPoint2D>();
 
     protected override void Update()
     {
@@ -92,28 +94,41 @@ public class Zombie : Dummy
         }
     }
 
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        collision.GetContacts(contactPoints);
+    }
+
     public bool IsGrounded()
     {
-        Debug.DrawRay(transform.position, Vector2.down * 2.1f, Color.red);
-        return Physics2D.Raycast(transform.position, Vector2.down, 2.1f, ~ignoredByRaycast);
+        foreach (ContactPoint2D contactPoint in contactPoints)
+        {
+            //Check if there's a contact point below the player
+            if (Mathf.Abs(contactPoint.point.y - mainCol.bounds.min.y) <= 0.1f)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //Activated by animation event
     public void EnableHit()
     {
-        attackCollider.gameObject.SetActive(true);
+        attackCol.gameObject.SetActive(true);
     }
 
     public void DisableHit()
     {
-        attackCollider.gameObject.SetActive(false);
+        attackCol.gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IDamageable target = collision.GetComponentInParent<IDamageable>();
 
-        if (!attackCollider || (target == null))
+        if (!attackCol || (target == null))
         {
             return;
         }

@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5eee871f865cce40bbaf1640bd0d292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 30
   equippedPos: {x: 0.53245217, y: 0.06572447, z: 1.5282336}
   equippedRot: {x: 0, y: 0, z: 276.58}
   equippedScale: {x: 0.08000003, y: 1.700001, z: 1}

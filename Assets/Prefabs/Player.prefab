@@ -1093,6 +1093,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 97f9b98a37fa3bc4799640a0c4a22889, type: 2}
   rb: {fileID: 5789225095936960779}
+  mainCol: {fileID: 2177264584843948385}
   playerHeight: 4
   animator: {fileID: 2008961277353530358}
   ignoredByRaycast:

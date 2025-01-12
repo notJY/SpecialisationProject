@@ -7,18 +7,30 @@ public class Projectile : MonoBehaviour
 {
     public float damage = 10;
     public float speed = 5;
-    private float lifetimer = 0;
+    [HideInInspector] public float dirSign = 1;
+    private float lifeTimer = 0;
+
+    private void Start()
+    {
+        dirSign = Mathf.Sign(PlayerInputMgr.instance.transform.localScale.x);
+        if (dirSign < 0)
+        {
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            spriteRenderer.flipX = true;
+            spriteRenderer.flipY = true;
+        }
+    }
 
     private void Update()
     {
-        lifetimer += Time.deltaTime;
+        lifeTimer += Time.deltaTime;
 
-        if (lifetimer >= 10)
+        if (lifeTimer >= 10)
         {
             Destroy(gameObject);
         }
 
-        transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+        transform.position += new Vector3(speed * Time.deltaTime, 0, 0) * dirSign;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

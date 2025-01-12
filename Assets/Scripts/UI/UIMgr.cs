@@ -12,6 +12,9 @@ public class UIMgr : MonoBehaviour
     public TMP_Text healthTxt;
     public Inventory inventory;
 
+    [Tooltip("UI elements that need to swap color depending on background")]
+    public GameObject[] uiElements;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,41 +32,69 @@ public class UIMgr : MonoBehaviour
         playerHealthbar.value = playerStats.currHealth/playerStats.maxHealth;
         healthTxt.text = playerStats.currHealth + "/" + playerStats.maxHealth;
 
-        //Check if background is same color as sprite and change sprite color if it is
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(playerHealthbar.transform.position),Vector2.zero, 20);
-        
-        //If there's something behind healthbar
-        if (hit)
+        foreach (var ui in uiElements)
         {
-            var spriteRenderer = hit.transform.GetComponent<SpriteRenderer>();
+            //Check if background is same color as sprite and change sprite color if it is
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(ui.transform.position), Vector2.zero, 20);
 
-            if (!spriteRenderer || (hit.transform.GetComponent<SpriteRenderer>().color != playerHealthbar.GetComponentInChildren<Image>().color))
+            //If there's something behind the ui
+            if (hit)
             {
-                return;
-            }
+                var spriteRenderer = hit.transform.GetComponent<SpriteRenderer>();
 
-            var images = playerHealthbar.GetComponentsInChildren<Image>();
-
-            foreach (Image image in images)
-            {
-                if (image.color == Color.black)
+                if (!spriteRenderer)
                 {
-                    image.color = Color.white;
+                    continue;
                 }
-                else
+
+                var image = ui.GetComponent<Image>();
+
+                if (image && (spriteRenderer.color == image.color))
+                {
+                    if (image.color == Color.black)
+                    {
+                        image.color = Color.white;
+                    }
+                    else
+                    {
+                        image.color = Color.black;
+                    }
+
+                    continue;
+                }
+
+                var text = ui.GetComponent<TMP_Text>();
+
+                if (text && (spriteRenderer.color == text.color))
+                {
+                    if (text.color == Color.black)
+                    {
+                        text.color = Color.white;
+                    }
+                    else
+                    {
+                        text.color = Color.black;
+                    }
+                }
+                
+            }
+            //If nothing
+            else if (!hit)
+            {
+                var image = ui.GetComponent<Image>();
+
+                if (image)
                 {
                     image.color = Color.black;
+                    continue;
                 }
-            }
-        }
-        //If nothing
-        else if (!hit)
-        {
-            var images = playerHealthbar.GetComponentsInChildren<Image>();
 
-            foreach (Image image in images)
-            {
-                image.color = Color.black;
+                var text = ui.GetComponent<TMP_Text>();
+
+                if (text)
+                {
+                    text.color = Color.black;
+                }
             }
         }
     }

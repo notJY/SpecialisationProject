@@ -145,3 +145,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 20
   speed: 25
+  dirSign: 1

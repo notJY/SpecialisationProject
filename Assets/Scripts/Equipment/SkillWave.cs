@@ -20,6 +20,6 @@ public class SkillWave : Skill
     public override void OnUse()
     {
         //Don't need to check cooldown because already done in PlayerCombat
-        Instantiate(projectilePrefab, PlayerInputMgr.instance.transform.position + new Vector3(1, 0, 0), projectilePrefab.transform.rotation);
+        GameObject proj = Instantiate(projectilePrefab, PlayerInputMgr.instance.transform.position + new Vector3(1, 0, 0), projectilePrefab.transform.rotation);
     }
 }

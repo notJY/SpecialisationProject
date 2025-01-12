@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -44,7 +45,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         {
             Inventory.instance.equippedItems[4].GetComponent<Skill>().cooldownTimer += Time.deltaTime;
         }
-        else if (Inventory.instance.equippedItems[5])
+        if (Inventory.instance.equippedItems[5])
         {
             Inventory.instance.equippedItems[5].GetComponent<Skill>().cooldownTimer += Time.deltaTime;
         }
