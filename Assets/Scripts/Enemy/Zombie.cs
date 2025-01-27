@@ -135,4 +135,13 @@ public class Zombie : Dummy
 
         target.OnDamage(damage);
     }
+
+    public override void TogglePause()
+    {
+        base.TogglePause();
+
+        aiPath.canMove = enabled;
+        animator.enabled = enabled;
+
+    }
 }

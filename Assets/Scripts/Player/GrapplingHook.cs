@@ -20,6 +20,8 @@ public class GrapplingHook : MonoBehaviour
         PlayerInputMgr.instance.grapplingInput.action.started += OnGrapple;
         PlayerInputMgr.instance.grapplingInput.action.canceled += OnCancel;
 
+        PauseMgr.instance.onTogglePause += TogglePause;
+
         distJoint.enabled = false;
     }
 
@@ -27,6 +29,8 @@ public class GrapplingHook : MonoBehaviour
     {
         PlayerInputMgr.instance.grapplingInput.action.started -= OnGrapple;
         PlayerInputMgr.instance.grapplingInput.action.canceled -= OnCancel;
+
+        PauseMgr.instance.onTogglePause -= TogglePause;
     }
 
     // Update is called once per frame
@@ -43,6 +47,11 @@ public class GrapplingHook : MonoBehaviour
 
     private void OnGrapple(InputAction.CallbackContext context)
     {
+        if (PauseMgr.instance.gamePaused)
+        {
+            return;
+        }
+
         initEndPos = mainCamera.ScreenToWorldPoint(Mouse.current.position.value);
 
         distJoint.connectedAnchor = initEndPos;
@@ -52,6 +61,11 @@ public class GrapplingHook : MonoBehaviour
 
     private void OnCancel(InputAction.CallbackContext context)
     {
+        if (PauseMgr.instance.gamePaused)
+        {
+            return;
+        }
+
         distJoint.enabled = false;
         lineRenderer.enabled = false;
     }
@@ -86,5 +100,10 @@ public class GrapplingHook : MonoBehaviour
 
             curvePoints[i] = pos;
         }
+    }
+
+    public void TogglePause()
+    {
+        enabled = !enabled;
     }
 }

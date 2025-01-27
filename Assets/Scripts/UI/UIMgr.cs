@@ -4,21 +4,33 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class UIMgr : MonoBehaviour
 {
     public EntityStats playerStats;
-    public Slider playerHealthbar;
-    public TMP_Text healthTxt;
+    public Slider playerHealthbar, skill1Indicator, skill2Indicator;
+    public TMP_Text healthTxt, dialogueTxt;
     public Inventory inventory;
 
     [Tooltip("UI elements that need to swap color depending on background")]
     public GameObject[] uiElements;
 
+    public GameObject dialogueUI;
+    public Dialogue dialogueObj;
+
+    private Coroutine runningCoroutine = null;
+    private bool skipDialogue;
+
     // Start is called before the first frame update
     void Start()
     {
         PlayerInputMgr.instance.inventoryInput.action.started += ToggleInventory;
+
+        if (dialogueUI)
+        {
+            dialogueUI.SetActive(false);
+        }
     }
 
     private void OnDestroy()
@@ -29,8 +41,22 @@ public class UIMgr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerHealthbar.value = playerStats.currHealth/playerStats.maxHealth;
-        healthTxt.text = playerStats.currHealth + "/" + playerStats.maxHealth;
+        if (playerHealthbar)
+        {   
+            playerHealthbar.value = playerStats.currHealth/playerStats.maxHealth;
+            healthTxt.text = playerStats.currHealth + "/" + playerStats.maxHealth;
+        }
+
+        if (Inventory.instance.equippedItems[4] && skill1Indicator)
+        {
+            Skill skill1 = Inventory.instance.equippedItems[4].GetComponent<Skill>();
+            skill1Indicator.value = skill1.cooldownTimer / skill1.cooldown;
+        }
+        if (Inventory.instance.equippedItems[5] && skill2Indicator)
+        {
+            Skill skill2 = Inventory.instance.equippedItems[5].GetComponent<Skill>();
+            skill2Indicator.value = skill2.cooldownTimer / skill2.cooldown;
+        }
 
         foreach (var ui in uiElements)
         {
@@ -101,6 +127,74 @@ public class UIMgr : MonoBehaviour
 
     private void ToggleInventory(InputAction.CallbackContext context)
     {
+        if (!inventory || !PauseMgr.instance)
+        {
+            return;
+        }
+
         inventory.gameObject.SetActive(!inventory.gameObject.activeSelf);
+        PauseMgr.instance.gamePaused = inventory.gameObject.activeSelf;
+        PauseMgr.instance.onTogglePause.Invoke();
+    }
+
+    public void PlayDialogue(string key)
+    {
+        if (!dialogueUI)
+        {
+            return;
+        }
+
+        if (runningCoroutine != null)
+        {
+            StopCoroutine(runningCoroutine);
+        }
+
+        dialogueUI.SetActive(true);
+        runningCoroutine = StartCoroutine(AnimateDialogue(key));
+    }
+
+    public IEnumerator AnimateDialogue(string key)
+    {
+        if (!dialogueObj)
+        {
+            yield break;
+        }
+
+        //Show text
+        dialogueTxt.text = "";
+        foreach (char chara in dialogueObj.GetValue(key))
+        {
+            if (skipDialogue)
+            {
+                skipDialogue = false;
+                dialogueTxt.text = dialogueObj.GetValue(key);
+                break;
+            }
+
+            dialogueTxt.text += chara;
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        //Wait for 3 seconds or click before disabling UI
+        float Timer = 0f;
+        while (true)
+        {
+            Timer += Time.deltaTime;
+
+            if ((Timer >= 20) || skipDialogue)
+            {
+                skipDialogue = false;
+                break;
+            }
+
+            yield return null;
+        }
+        
+        dialogueUI.SetActive(false);
+    }
+
+    public void SkipDialogue()
+    {
+        skipDialogue = true;
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class SkillWave : Skill
 {
     public GameObject projectilePrefab;
-    protected bool activated = false;
 
     public override void OnEquip()
     {

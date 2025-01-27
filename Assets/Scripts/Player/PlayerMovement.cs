@@ -30,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
         PlayerInputMgr.instance.runInput.action.started += OnRun;
         PlayerInputMgr.instance.runInput.action.canceled += OnStopRun;
 
+        PauseMgr.instance.onTogglePause += TogglePause;
+
         initSpeed = playerStats.speed;
     }
 
@@ -42,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
 
         PlayerInputMgr.instance.runInput.action.started -= OnRun;
         PlayerInputMgr.instance.runInput.action.canceled -= OnStopRun;
+
+        PauseMgr.instance.onTogglePause -= TogglePause;
     }
 
     private void Update()
@@ -52,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, 1);
         }
+
     }
 
     void FixedUpdate()
@@ -155,6 +160,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext context)
     {
+        if (PauseMgr.instance.gamePaused)
+        {
+            return;
+        }
+
         //If on ground
         if (IsGrounded())
         {
@@ -169,12 +179,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnRun(InputAction.CallbackContext context)
     {
+        if (PauseMgr.instance.gamePaused)
+        {
+            return;
+        }
+
         running = true;
         runningTime = (float)Math.Round(Time.time, 2, MidpointRounding.AwayFromZero);
     }
 
     private void OnStopRun(InputAction.CallbackContext context)
     {
+        if (PauseMgr.instance.gamePaused)
+        {
+            return;
+        }
+
         running = false;
 
         float runEndTime = (float)Math.Round(Time.time, 2, MidpointRounding.AwayFromZero);
@@ -200,5 +220,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void TogglePause()
+    {
+        rb.simulated = !rb.simulated;
+        animator.enabled = !animator.enabled;
+        enabled = !enabled;
     }
 }

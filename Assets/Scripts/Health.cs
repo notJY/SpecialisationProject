@@ -13,7 +13,7 @@ public class Health : MonoBehaviour, IDamageable
 
         if (currHealth <= 0 )
         {
-            Destroy(gameObject);
+            Destroy(gameObject, 0.1f);
         }
     }
 }

@@ -28,6 +28,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         PlayerInputMgr.instance.attackInput.action.started += OnAttack;
         PlayerInputMgr.instance.skill1Input.action.started += OnSkill1;
         PlayerInputMgr.instance.skill2Input.action.started += OnSkill2;
+
+        PauseMgr.instance.onTogglePause += TogglePause;
     }
 
     private void OnDestroy()
@@ -35,6 +37,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         PlayerInputMgr.instance.attackInput.action.started -= OnAttack;
         PlayerInputMgr.instance.skill1Input.action.started -= OnSkill1;
         PlayerInputMgr.instance.skill2Input.action.started -= OnSkill2;
+
+        PauseMgr.instance.onTogglePause -= TogglePause;
     }
 
     // Update is called once per frame
@@ -53,11 +57,6 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
     private void LateUpdate()
     {
-        if (!weapon)
-        {
-            return;
-        }
-
         if (animator.GetCurrentAnimatorStateInfo(2).IsName("Player_Idle") && !animator.IsInTransition(2))
         {
             animator.SetLayerWeight(2, 0);
@@ -82,7 +81,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
     private void OnAttack(InputAction.CallbackContext context)
     {
-        if (!weapon || !weapon.transform.parent)
+        if (!weapon || !weapon.transform.parent || PauseMgr.instance.gamePaused)
         {
             return;
         }
@@ -92,6 +91,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
     private void OnSkill1(InputAction.CallbackContext context)
     {
+        if (PauseMgr.instance.gamePaused)
+        {
+            return;
+        }
+
         InventoryItem[] equipment = Inventory.instance.equippedItems;
 
         //Check if there's a skill equipped
@@ -101,14 +105,6 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         }
 
         Skill skill = equipment[4].GetComponent<Skill>();
-
-        //Check if skill on cooldown
-        if (skill.cooldownTimer < skill.cooldown)
-        {
-            return;
-        }
-
-        skill.cooldownTimer = 0;
 
         //Check if requirements to use are met
         if (skill.requiredEquipment.Length != 0)
@@ -134,6 +130,14 @@ public class PlayerCombat : MonoBehaviour, IDamageable
                 return;
             }
         }
+
+        //Check if skill on cooldown
+        if (skill.cooldownTimer < skill.cooldown)
+        {
+            return;
+        }
+
+        skill.cooldownTimer = 0;
 
         AnimationClip skillAnim = skill.anim;
 
@@ -163,6 +167,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
     private void OnSkill2(InputAction.CallbackContext context)
     {
+        if (PauseMgr.instance.gamePaused)
+        {
+            return;
+        }
+
         InventoryItem[] equipment = Inventory.instance.equippedItems;
 
         //Check if there's a skill equipped
@@ -172,14 +181,6 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         }
 
         Skill skill = equipment[5].GetComponent<Skill>();
-
-        //Check if skill on cooldown
-        if (skill.cooldownTimer < skill.cooldown)
-        {
-            return;
-        }
-
-        skill.cooldownTimer = 0;
 
         //Check if requirements to use are met
         if (skill.requiredEquipment.Length != 0)
@@ -205,6 +206,14 @@ public class PlayerCombat : MonoBehaviour, IDamageable
                 return;
             }
         }
+
+        //Check if skill on cooldown
+        if (skill.cooldownTimer < skill.cooldown)
+        {
+            return;
+        }
+
+        skill.cooldownTimer = 0;
 
         AnimationClip skillAnim = skill.anim;
 
@@ -290,5 +299,13 @@ public class PlayerCombat : MonoBehaviour, IDamageable
                 Inventory.instance.equippedItems[5].GetComponent<Skill>().OnUse();
                 break;
         }
+
+        skillUsed = 0;
+    }
+
+    public void TogglePause()
+    {
+
+        enabled = !enabled;
     }
 }

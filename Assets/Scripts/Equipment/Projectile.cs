@@ -12,6 +12,8 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
+        PauseMgr.instance.onTogglePause += TogglePause;
+
         dirSign = Mathf.Sign(PlayerInputMgr.instance.transform.localScale.x);
         if (dirSign < 0)
         {
@@ -19,6 +21,11 @@ public class Projectile : MonoBehaviour
             spriteRenderer.flipX = true;
             spriteRenderer.flipY = true;
         }
+    }
+
+    private void OnDestroy()
+    {
+        PauseMgr.instance.onTogglePause -= TogglePause;
     }
 
     private void Update()
@@ -43,5 +50,10 @@ public class Projectile : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    public void TogglePause()
+    {
+        enabled = !enabled;
     }
 }

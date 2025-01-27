@@ -20,6 +20,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private GraphicRaycaster uiRaycaster;
     [SerializeField] private GameObject[] equipmentSlots; //0-2: armor slots, 3: weapon slot, 4-5: skill slots
     [SerializeField] private Sprite[] equipmentIcons; //0: armor, 1: weapon, 2: skill
+    [SerializeField] private Image skill1HUDIcon, skill2HUDIcon;
 
     private bool draggingItem = false;
     private PointerEventData clickData = new PointerEventData(EventSystem.current);
@@ -77,6 +78,18 @@ public class Inventory : MonoBehaviour
             {
                 img.sprite = equippedItems[i].icon;
                 img.color = Color.black;
+
+                switch (i)
+                {
+                    case 4:
+                        skill1HUDIcon.sprite = equippedItems[i].icon;
+                        skill1HUDIcon.color = Color.black;
+                        break;
+                    case 5:
+                        skill2HUDIcon.sprite= equippedItems[i].icon;
+                        skill2HUDIcon.color = Color.black;
+                        break;
+                }
             }
             else
             {
@@ -368,8 +381,9 @@ public class Inventory : MonoBehaviour
                         break;
                     case 3: //Weapon Slot
                         //Check if dragged item cannot be equipped in this slot
-                        //Since this is the only weapon slot, the dragged item can only come from inventory so no need to check equippedItems or indices
-                        if (inventory[selectedInventoryIndex].equipmentType != InventoryItem.EquipmentType.Weapon)
+                        if (((selectedInventoryIndex >= 0) && (inventory[selectedInventoryIndex].equipmentType != InventoryItem.EquipmentType.Weapon)) ||
+                            ((selectedEquipmentIndex >= 0) && (equippedItems[selectedEquipmentIndex].equipmentType != InventoryItem.EquipmentType.Weapon)))
+
                         {
                             break;
                         }
@@ -476,10 +490,12 @@ public class Inventory : MonoBehaviour
             if (selectedEquipmentIndex >= 0)
             {
                 draggedImg.transform.SetParent(equipmentSlots[selectedEquipmentIndex].transform, false);
+                draggedImg.transform.localPosition = Vector3.zero;
             }
             else if (selectedInventoryIndex >= 0)
             {
                 draggedImg.transform.SetParent(inventorySlots[selectedInventoryIndex].transform, false);
+                draggedImg.transform.localPosition = Vector3.zero;
             }
 
             UpdateInventoryDisplay();
