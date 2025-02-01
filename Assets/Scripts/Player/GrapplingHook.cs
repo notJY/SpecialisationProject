@@ -51,8 +51,15 @@ public class GrapplingHook : MonoBehaviour
         {
             return;
         }
+        
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, mainCamera.ScreenToWorldPoint(Mouse.current.position.value) - transform.position, 20, ~LayerMask.GetMask("Player"));
 
-        initEndPos = mainCamera.ScreenToWorldPoint(Mouse.current.position.value);
+        if (!hit || (hit.transform.tag != "GrapplePoint"))
+        {
+            return;
+        }
+
+        initEndPos = hit.transform.position;
 
         distJoint.connectedAnchor = initEndPos;
         distJoint.enabled = true;

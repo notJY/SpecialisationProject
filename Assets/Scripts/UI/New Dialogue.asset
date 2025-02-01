@@ -20,6 +20,7 @@ MonoBehaviour:
   - skill
   - grapple
   - break
+  - wallJump
   values:
   - W, A, S, D to move and jump
   - After picking up an item, press B to open inventory and drag to correct slot
@@ -27,6 +28,9 @@ MonoBehaviour:
   - Hold SPACE to run, tap to dash
   - Left click to attack if a weapon is equipped
   - Press E or Q to use skill if you have it equipped with a weapon
-  - Press F to shoot grappling hook to mouse position to swing. You can also wall
-    jump by sliding on a wall and jumping
+  - Press F to shoot grappling hook towards the mouse position. It will not work
+    if there is no available grapple point. You can then hold a movement key to swing
+    in that direction while mid-air.
   - Some small/thin objects can be broken to clear a path
+  - You can wall jump by moving into a wall and jumping, this will boost you upwards
+    and away from the wall

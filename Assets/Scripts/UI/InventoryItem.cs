@@ -19,7 +19,6 @@ public class InventoryItem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.name);
         if ((collision.transform.parent.tag != "Player") || (collision.name != "MainCollider"))
         {
             return;

@@ -19,18 +19,20 @@ public class UIMgr : MonoBehaviour
     public GameObject dialogueUI;
     public Dialogue dialogueObj;
 
-    private Coroutine runningCoroutine = null;
-    private bool skipDialogue;
+    [Header("For boss")]
+    [SerializeField] private GameObject bossIndicator, bossArrow;
+    [SerializeField] private Camera mainCamera;
+
+    private Coroutine runningDialogueCoroutine = null;
+    private bool skipDialogue, showBossPos, bossPosCoroutineRunning;
 
     // Start is called before the first frame update
     void Start()
     {
         PlayerInputMgr.instance.inventoryInput.action.started += ToggleInventory;
 
-        if (dialogueUI)
-        {
-            dialogueUI.SetActive(false);
-        }
+        dialogueUI.SetActive(false);
+        bossIndicator.SetActive(false);
     }
 
     private void OnDestroy()
@@ -144,13 +146,13 @@ public class UIMgr : MonoBehaviour
             return;
         }
 
-        if (runningCoroutine != null)
+        if (runningDialogueCoroutine != null)
         {
-            StopCoroutine(runningCoroutine);
+            StopCoroutine(runningDialogueCoroutine);
         }
 
         dialogueUI.SetActive(true);
-        runningCoroutine = StartCoroutine(AnimateDialogue(key));
+        runningDialogueCoroutine = StartCoroutine(AnimateDialogue(key));
     }
 
     public IEnumerator AnimateDialogue(string key)
@@ -196,5 +198,80 @@ public class UIMgr : MonoBehaviour
     public void SkipDialogue()
     {
         skipDialogue = true;
+    }
+
+    public void ShowBossPos(Vector2 pos)
+    {
+        if (!bossIndicator)
+        {
+            return;
+        }
+
+        if (!bossPosCoroutineRunning)
+        {
+            showBossPos = true;
+            StartCoroutine(FlashBossIndicator());
+        }
+
+        Vector2 bossScreenPos = mainCamera.WorldToScreenPoint(pos);
+        bossIndicator.transform.position = bossScreenPos + new Vector2(0, 150);
+
+        if ((bossScreenPos.y >= 0) && (bossScreenPos.y <= Screen.height) && (bossScreenPos.x <= Screen.width) && (bossScreenPos.x >= 0))
+        {
+            bossArrow.SetActive(false);
+            return;
+        }
+
+        bossArrow.SetActive(true);
+
+        //Calculate the angle to rotate bossArrow
+        Vector2 dir = (bossScreenPos - new Vector2(Screen.width/2, Screen.height/2)).normalized;
+        float angle = Mathf.Atan2(dir.x, -dir.y) * Mathf.Rad2Deg;
+        
+        bossArrow.transform.localRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        
+        if ((bossScreenPos.x > 0) && (bossScreenPos.y <= Screen.height - 130) && (bossScreenPos.y >= 130))
+        {
+            bossIndicator.transform.position = new Vector3(Screen.width - 130, bossScreenPos.y, 0);
+        }
+        else if ((bossScreenPos.x < 0) && (bossScreenPos.y <= Screen.height - 130) && (bossScreenPos.y >= 130))
+        {
+            bossIndicator.transform.position = new Vector3(130, bossScreenPos.y, 0);
+        }
+        else if ((bossScreenPos.y < 0) && (bossScreenPos.x <= Screen.width) && (bossScreenPos.x >= 0))
+        {
+            bossIndicator.transform.position = new Vector3(bossScreenPos.x, 130, 0);
+        }
+        else if ((bossScreenPos.y > 0) && (bossScreenPos.x <= Screen.width) && (bossScreenPos.x >= 0))
+        {
+            bossIndicator.transform.position = new Vector3(bossScreenPos.x, Screen.height - 130, 0);
+        }
+    }
+
+    public IEnumerator FlashBossIndicator()
+    {
+        bossPosCoroutineRunning = true;
+        
+        while (showBossPos && bossIndicator)
+        {
+            bossIndicator.SetActive(true);
+            yield return new WaitForSeconds(0.2f);
+            bossIndicator.SetActive(false);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        bossPosCoroutineRunning = false;
+    }
+
+    public void HideBossPos()
+    {
+        if (!bossIndicator)
+        {
+            return;
+        }
+
+        showBossPos = false;
+        bossIndicator.SetActive(false);
     }
 }

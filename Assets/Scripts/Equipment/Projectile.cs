@@ -8,9 +8,9 @@ public class Projectile : MonoBehaviour
     public float damage = 10;
     public float speed = 5;
     [HideInInspector] public float dirSign = 1;
-    private float lifeTimer = 0;
+    protected float lifeTimer = 0;
 
-    private void Start()
+    protected virtual void Start()
     {
         PauseMgr.instance.onTogglePause += TogglePause;
 
@@ -23,12 +23,12 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         PauseMgr.instance.onTogglePause -= TogglePause;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         lifeTimer += Time.deltaTime;
 
@@ -40,7 +40,7 @@ public class Projectile : MonoBehaviour
         transform.position += new Vector3(speed * Time.deltaTime, 0, 0) * dirSign;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         IDamageable target = collision.gameObject.GetComponent<IDamageable>();
 
@@ -52,7 +52,7 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void TogglePause()
+    protected virtual void TogglePause()
     {
         enabled = !enabled;
     }

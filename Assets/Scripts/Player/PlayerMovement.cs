@@ -129,7 +129,8 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("walkSpeedMult", 0);
             animator.SetLayerWeight(1, 1);
 
-            if (Physics2D.Raycast(transform.position - Vector3.right, Vector2.right, 2, ~ignoredByRaycast))
+            RaycastHit2D hit = Physics2D.Raycast(transform.position - Vector3.right, Vector2.right, 2, ~ignoredByRaycast);
+            if (hit && hit.transform.tag != "GrapplePoint")
             {
                 animator.SetBool("grabbingWall", true);
             }
@@ -171,9 +172,14 @@ public class PlayerMovement : MonoBehaviour
             canJump = true;
         }
         //If on a wall
-        else if (Physics2D.Raycast(transform.position - new Vector3(1, 1.5f, 0), Vector2.right, 2, ~ignoredByRaycast))
+        else
         {
-            canWallJump = true;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position - new Vector3(1, 1.5f, 0), Vector2.right, 2, ~ignoredByRaycast);
+
+            if (hit && hit.transform.tag != "GrapplePoint")
+            {
+                canWallJump = true;
+            }
         }
     }
 
