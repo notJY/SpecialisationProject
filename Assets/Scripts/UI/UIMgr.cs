@@ -31,8 +31,15 @@ public class UIMgr : MonoBehaviour
     {
         PlayerInputMgr.instance.inventoryInput.action.started += ToggleInventory;
 
-        dialogueUI.SetActive(false);
-        bossIndicator.SetActive(false);
+        if (dialogueUI)
+        {
+            dialogueUI.SetActive(false);
+        }
+
+        if (bossIndicator)
+        {
+            bossIndicator.SetActive(false);
+        }
     }
 
     private void OnDestroy()

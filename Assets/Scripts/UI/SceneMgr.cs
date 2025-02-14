@@ -5,18 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneMgr : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SwitchScene(int index)
     {
         SceneManager.LoadScene(index);
@@ -25,5 +13,10 @@ public class SceneMgr : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public int GetCurrentScene()
+    {
+        return SceneManager.GetActiveScene().buildIndex;
     }
 }

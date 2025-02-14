@@ -11,7 +11,7 @@ public abstract class Skill : MonoBehaviour, IEquippable
     public AnimationClip anim;
     public MonoBehaviour[] requiredEquipment;
     public float cooldown;
-    [HideInInspector] public float cooldownTimer = 100;
+    public float cooldownTimer = 100;
 
     protected bool dropped = true;
 

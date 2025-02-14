@@ -8,8 +8,8 @@ public abstract class Weapon : MonoBehaviour, IEquippable
     public Vector3 equippedPos, equippedRot, equippedScale;
 
     [SerializeField] protected Collider2D col;
-    protected bool dropped = true;
-    protected PlayerCombat owner;
+    [SerializeField] protected bool dropped = true;
+    [SerializeField] protected PlayerCombat owner;
 
     // Start is called before the first frame update
     protected virtual void Start()

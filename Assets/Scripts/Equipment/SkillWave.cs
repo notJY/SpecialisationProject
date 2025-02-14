@@ -8,7 +8,6 @@ public class SkillWave : Skill
 
     public override void OnEquip()
     {
-        
     }
 
     public override void OnUnequip()

@@ -13,13 +13,22 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject weaponPivot;
     [SerializeField] private AnimatorOverrideController animOverrides;
+    [SerializeField] private SceneMgr sceneMgr;
 
     private bool endAnim = false;
     private int skillUsed = 0;
 
     private void Awake()
     {
-        playerStats.ResetValues();
+        if (sceneMgr.GetCurrentScene() == 1)
+        {
+            playerStats.ResetValues();
+        }
+        else
+        {
+            playerStats.currHealth = 150;
+            playerStats.maxHealth = 150;
+        }
     }
 
     // Start is called before the first frame update
@@ -73,7 +82,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
         if (playerStats.currHealth <= 0)
         {
-            Destroy(gameObject);
+            sceneMgr.SwitchScene(3);
         }
     }
 

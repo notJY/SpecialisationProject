@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,8 +11,8 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance = null;
-    [HideInInspector] public InventoryItem[] inventory = new InventoryItem[24];
-    [HideInInspector] public InventoryItem[] equippedItems = new InventoryItem[6];
+    public InventoryItem[] inventory = new InventoryItem[24];
+    public InventoryItem[] equippedItems = new InventoryItem[6];
 
     [SerializeField] private GameObject[] inventorySlots;
     //Used for storing instantiated items
@@ -21,6 +22,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private GameObject[] equipmentSlots; //0-2: armor slots, 3: weapon slot, 4-5: skill slots
     [SerializeField] private Sprite[] equipmentIcons; //0: armor, 1: weapon, 2: skill
     [SerializeField] private Image skill1HUDIcon, skill2HUDIcon;
+    [SerializeField] private SceneMgr sceneMgr;
 
     private bool draggingItem = false;
     private PointerEventData clickData = new PointerEventData(EventSystem.current);
@@ -28,6 +30,10 @@ public class Inventory : MonoBehaviour
     private Image draggedImg = null;
     private int selectedInventoryIndex = -1;
     private int selectedEquipmentIndex = -1; //If one of these > 0, that means it is being selected
+
+    private void Awake()
+    {
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -41,8 +47,8 @@ public class Inventory : MonoBehaviour
             Destroy(gameObject);
         }
 
-        gameObject.SetActive(false);
         UpdateInventoryDisplay();
+        gameObject.SetActive(false);
     }
 
     private void Update()

@@ -163,5 +163,5 @@ MonoBehaviour:
   requiredEquipment:
   - {fileID: 3964905950520478958, guid: 72e8523c645761c4fabd2ece8f737bf8, type: 3}
   cooldown: 3
-  cooldownTimer: 0
+  cooldownTimer: 100
   projectilePrefab: {fileID: 8321089409741909418, guid: 09eeb6a0dce453c4da44c82027d735f4, type: 3}
